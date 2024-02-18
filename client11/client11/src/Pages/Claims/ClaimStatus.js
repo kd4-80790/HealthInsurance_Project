@@ -1,0 +1,60 @@
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+
+const ClaimStatus = () => {
+  // Simulated claim status data - Replace this with actual data from API or state
+  const [claimStatusData, setClaimStatusData ] = useState([]);
+
+  useEffect(() => {
+    axios
+    .get("http://localhost:5001/claim/update")
+    .then((response) => {
+      setClaimStatusData(response.data);
+      console.log(response);
+    })
+    .catch((error) => {
+      setClaimStatusData("");
+      console.error("Error fetching data:", error);
+    });
+  });
+
+  return (
+    <div>
+      <h2 className="text-2xl font-semibold mb-4 text-center">Claim Status</h2>
+      {claimStatusData === "" ? (
+        <p>No claim status available.</p>
+      ) : (
+        <div className="overflow-x-auto">
+          <table className="w-full border-collapse">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="p-2 border">Claim Number</th>
+                <th className="p-2 border">Status</th>
+                <th className="p-2 border">Amount</th>
+                <th className="p-2 border">Date</th>
+                <th className="p-2 border">Policy Holder</th>
+                <th className="p-2 border">Phone Number</th>
+                <th className="p-2 border">Email</th>
+              </tr>
+            </thead>
+            <tbody>
+              {claimStatusData.map((claim) => (
+                <tr key={claim.claimNumber} className="hover:bg-gray-50">
+                  <td className="p-2 border">{claim.claimNumber}</td>
+                  <td className="p-2 border">{claim.status}</td>
+                  <td className="p-2 border">{claim.amount}</td>
+                  <td className="p-2 border">{claim.date}</td>
+                  <td className="p-2 border">{claim.policyHolder}</td>
+                  <td className="p-2 border">{claim.phoneNumber}</td>
+                  <td className="p-2 border">{claim.email}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default ClaimStatus;
